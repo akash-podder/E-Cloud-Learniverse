@@ -37,3 +37,14 @@ Run the following command in the project root (where your Dockerfile is located)
 docker build -t my-fastapi-app .
 docker run --rm -d -p 9998:9998 --name my-fastapi-container my-fastapi-app
 ```
+
+### Postgres in Docker Command
+```bash
+docker run --rm -it -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=mydb -p 5433:5432 postgres:17
+```
+
+###
+psycopg2-binary installation Command
+```bash
+pip install --no-build-isolation --only-binary :all: psycopg2-binary sqlalchemy
+```
