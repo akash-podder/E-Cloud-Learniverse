@@ -5,10 +5,17 @@ from fastapi.templating import Jinja2Templates
 
 app = FastAPI()
 
-# app.mount("/static", StaticFiles(directory="static"), name="static")
-# templates = Jinja2Templates(directory="templates")
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
 
 
 @app.get("/")
 async def root():
     return {"message": "Hola World"}
+
+# TEMPLATE View
+@app.get("/index", response_class=HTMLResponse)
+async def read_item(request: Request):
+    return templates.TemplateResponse(
+        request=request, name="index.html"
+    )
