@@ -94,3 +94,4 @@ local_settings.py
 .idea
 static.tar.gz
 celerybeat.pid
+.claude/
