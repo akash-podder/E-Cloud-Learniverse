@@ -40,7 +40,7 @@ docker run --rm -d -p 9998:9998 --name my-fastapi-container my-fastapi-app
 
 ### Postgres in Docker Command
 ```bash
-docker run --rm -it -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=e_cloud_learniverse_db -p 5433:5432 postgres:17
+docker run --rm -it --name my-postgres-container -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=e_cloud_learniverse_db -p 5433:5432 postgres:17
 ```
 
 ###

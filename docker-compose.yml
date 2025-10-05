@@ -1,0 +1,48 @@
+version: "3.8"
+
+services:
+  fastapi_web_app:
+    build: .
+    volumes:
+      - .:/web_app
+    ports:
+      - "8002:9998"
+    image: e_cloud_learniverse_fastapi_image:latest
+    container_name: fastapi_learniverse_container
+    command: uvicorn main:app --host 0.0.0.0 --port 9998 --reload
+    environment:
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_HOST=learniverse_db
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=e_cloud_learniverse_db
+    networks:
+      - fastapi_network
+    depends_on:
+      - learniverse_db
+
+  learniverse_db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=e_cloud_learniverse_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    container_name: postgres_learniverse_db_container
+    ports:
+      - "5434:5432"
+    networks:
+      - fastapi_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  fastapi_network:
+    driver: bridge
+
+volumes:
+  postgres_data:

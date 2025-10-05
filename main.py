@@ -21,9 +21,10 @@ app = FastAPI(lifespan=lifespan)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
-@app.get("/index")
+# for Health check
+@app.get("/health-check")
 async def root():
-    return {"message": "Hola World from Index"}
+    return {"message": "Health is Okay"}
 
 # ----- MAIN VIEW -----
 # GET

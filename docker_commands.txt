@@ -1,0 +1,19 @@
+# Normal DockerFile Commands
+sudo docker build --tag e-cloud-fastapi-docker-image .
+sudo docker run --publish 8002:9998 --name my-fastapi-web-container e-cloud-fastapi-docker-image (Host---> 8002 Port & Inside Container's Port 9998)
+sudo docker exec -it <CONTAINER_ID> /bin/bash
+
+
+# Docker-Compose Commands
+sudo docker-compose up
+
+# eksathe UP & BUILD dite hobe naile kaaj korbe Nah
+sudo docker-compose up --build (naile `DEPENDS_ON` property of docker-compose er ta kaaj kore Nah)
+
+sudo docker-compose run django_web_app python manage.py migrate
+
+# sudo docker-compose build
+# sudo docker-compose up
+
+# Start ****** Celery-BEAT ***** otherwise we can use `NUMBER_COUNTER` task
+# celery -A django_docker_project beat --loglevel=info
