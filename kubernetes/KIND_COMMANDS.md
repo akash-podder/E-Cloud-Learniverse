@@ -29,3 +29,32 @@ This Config File is AUTOMATICALLY Created by “Kind”... If we are using any C
 ```bash
 cat ~/.kube/config
 ```
+  
+To “Temporarily” set “kubectl” to Point to Different Config File
+```bash
+export KUBECONFIG=~/.kube/devconfig
+```
+
+To see current Config which the kubectl is pointing to
+```bash
+kubectl config view
+```
+
+Kubectl is Pointing to Currently which “Cluster”
+```bash
+kubectl config current-context
+```
+
+To Switch to another “Cluster”
+```bash
+kubectl config use-context kind-mac-cluster-test
+```
+
+```bash
+kubectl config current-context
+```
+
+Load `e-cloud-fastapi-docker-image` to locally in "mac-cluster-test"
+```bash
+kind load docker-image e-cloud-fastapi-docker-image:latest --name mac-cluster-test
+```

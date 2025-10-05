@@ -1,0 +1,34 @@
+# ------------------------
+# Postgres Deployment Object
+# ------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  labels:
+    ramos-db-app: postgres-e-cloud-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      ramos-db-app: postgres-e-cloud-pod
+
+  # This section defines the Pod template (metadata + spec)
+  template:
+    metadata:
+      labels:
+        ramos-db-app: postgres-e-cloud-pod
+    spec:
+      containers:
+        - name: my-postgres-pod
+          image: postgres:17             # Use local image if available
+          imagePullPolicy: IfNotPresent  # Use local image if exists, otherwise pull
+          env:
+            - name: POSTGRES_USER
+              value: "postgres"
+            - name: POSTGRES_PASSWORD
+              value: "postgres"
+            - name: POSTGRES_DB
+              value: "e_cloud_learniverse_db"
+          ports:
+            - containerPort: 5432

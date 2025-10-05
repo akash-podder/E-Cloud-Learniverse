@@ -1,0 +1,37 @@
+# ------------------------
+# FastAPI Deployment Object
+# ------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastapi-e-cloud-deployment
+  labels:
+    # Any KEY-VALUE pair is ACCEPTABLE here, convention is to use "app: fastapi-e-cloud-deployment"
+    # But I am using "ramos-app-name" Key so that, I can show ANY CUSTOM KEY-VALUE pair can be Given
+    ramos-app-name: fastapi-e-cloud-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      # "ramos-app-name: fastapi-e-cloud-pod" this KEY-VALUE Pair Must match the Below Pod's KEY-VALUE Pair
+      ramos-app-name: fastapi-e-cloud-pod
+
+  # This section defines the Pod template (metadata + spec)
+  template:
+    metadata:
+      labels:
+        ramos-app-name: fastapi-e-cloud-pod
+    spec:
+      containers:
+        - name: my-postgres-pod
+          image: postgres:17             # Use local image if available
+          imagePullPolicy: IfNotPresent  # Use local image if exists, otherwise pull
+          env:
+            - name: POSTGRES_USER
+              value: "postgres"
+            - name: POSTGRES_PASSWORD
+              value: "postgres"
+            - name: POSTGRES_DB
+              value: "e_cloud_learniverse_db"
+          ports:
+            - containerPort: 5432

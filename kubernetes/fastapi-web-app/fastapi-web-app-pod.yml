@@ -1,0 +1,25 @@
+# ------------------------
+# FastAPI Pod, This is for Testing, we will use FastAPI Deployment Object
+# ------------------------
+apiVersion: v1
+kind: Pod
+metadata:
+  name: e-cloud-learniverse
+spec:
+  containers:
+    - name: e-cloud-learniverse-pod
+      image: e-cloud-fastapi-docker-image
+      imagePullPolicy: Never
+      env:
+        - name: DATABASE_USER
+          value: "postgres"
+        - name: DATABASE_PASSWORD
+          value: "postgres"
+        - name: DATABASE_HOST
+          value: "postgres-e-cloud-service"   # 👈 Must be the Service name, not localhost
+        - name: DATABASE_PORT
+          value: "5432"
+        - name: DATABASE_NAME
+          value: "e_cloud_learniverse_db"
+      ports:
+        - containerPort: 9998

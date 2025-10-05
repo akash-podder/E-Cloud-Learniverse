@@ -1,0 +1,16 @@
+# ------------------------
+# Postgres Service Object
+# ------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-e-cloud-service
+spec:
+  selector:
+    # 👈 Must be "Pod" names, NOT "Deployment" Name
+    # 👈 Must CUSTOM KEY-VALUE Pairs of "Pod"
+    ramos-db-app: postgres-e-cloud-pod
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
