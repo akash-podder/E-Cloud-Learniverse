@@ -21,14 +21,14 @@ app = FastAPI(lifespan=lifespan)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
-@app.get("/")
+@app.get("/index")
 async def root():
-    return {"message": "Hola World"}
+    return {"message": "Hola World from Index"}
 
 # ----- MAIN VIEW -----
 # GET
-@app.get("/index", response_class=HTMLResponse)
-async def show_messages(request: Request, db: AsyncSession = Depends(get_db)):
+@app.get("/", response_class=HTMLResponse)
+async def show_index(request: Request, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(message_model.Message))
     messages = result.scalars().all()
     return templates.TemplateResponse(
@@ -37,7 +37,7 @@ async def show_messages(request: Request, db: AsyncSession = Depends(get_db)):
 
 # ----- FORM HANDLER -----
 # POST
-@app.post("/index", response_class=HTMLResponse)
+@app.post("/", response_class=HTMLResponse)
 async def add_message(
     request: Request,
     username: str = Form(...),
