@@ -1,0 +1,17 @@
+# ------------------------
+# Fastapi Web App Service Object
+# ------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: fastapi-web-app-service
+spec:
+  selector:
+    # 👈 Must be "Pod" names, NOT "Deployment" Name
+    ramos-app-name: fastapi-web-app-e-cloud-pod # 👈 this Must Match with "matchLabels" KEY-VALUE pair of "POD"
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 80          # Kubernetes-Cluster-internal port other Pods use to reach this Service
+      targetPort: 9998  # Port inside your FastAPI Pod
+      nodePort: 30004   # Port you expect to access from outside (also from your Local machine like: MacOS)

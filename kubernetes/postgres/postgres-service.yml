@@ -9,7 +9,7 @@ spec:
   selector:
     # 👈 Must be "Pod" names, NOT "Deployment" Name
     # 👈 Must CUSTOM KEY-VALUE Pairs of "Pod"
-    ramos-db-app: postgres-e-cloud-pod
+    messi-db-app: postgres-e-cloud-pod
   ports:
     - protocol: TCP
       port: 5432

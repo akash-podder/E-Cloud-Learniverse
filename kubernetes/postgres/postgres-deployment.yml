@@ -6,18 +6,22 @@ kind: Deployment
 metadata:
   name: postgres
   labels:
-    ramos-db-app: postgres-e-cloud-deployment
+    # 👈 Any KEY-VALUE pair is ACCEPTABLE here, convention is to use "app: fastapi-e-cloud-deployment"
+    # But I am using "messi-db-app:" Key so that, I can show ANY CUSTOM KEY-VALUE pair can be Given
+    messi-db-app: postgres-e-cloud-deployment
+
 spec:
   replicas: 1
   selector:
     matchLabels:
-      ramos-db-app: postgres-e-cloud-pod
+      # "messi-db-app: postgres-e-cloud-pod" 👈 this KEY-VALUE Pair Must match the Below Pod's KEY-VALUE Pair
+      messi-db-app: postgres-e-cloud-pod
 
   # This section defines the Pod template (metadata + spec)
   template:
     metadata:
       labels:
-        ramos-db-app: postgres-e-cloud-pod
+        messi-db-app: postgres-e-cloud-pod # 👈 this Must Match with "matchLabels" KEY-VALUE pair
     spec:
       containers:
         - name: my-postgres-pod

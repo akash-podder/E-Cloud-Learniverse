@@ -16,7 +16,7 @@ spec:
         - name: DATABASE_PASSWORD
           value: "postgres"
         - name: DATABASE_HOST
-          value: "postgres-e-cloud-service"   # 👈 Must be the Service name, not localhost
+          value: "postgres-e-cloud-service"   # 👈 Must be the Service name of "Postgres"
         - name: DATABASE_PORT
           value: "5432"
         - name: DATABASE_NAME
