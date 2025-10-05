@@ -1,9 +1,31 @@
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Item Details</title>
-    <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
+    <title>Message Board</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-        <h1>E-Cloud-Learniverse</h1>
+    <h1>E-Cloud-Learniverse Board 🌐</h1>
+
+    <form action="/index" method="post">
+        <input type="text" name="username" placeholder="Your name" required>
+        <br>
+        <textarea name="content" placeholder="Write a message..." rows="3" cols="40" required></textarea>
+        <br>
+        <button type="submit">Post Message</button>
+    </form>
+
+    <hr>
+
+    <h2>Existing Messages:</h2>
+    {% if messages %}
+        <ul>
+        {% for msg in messages %}
+            <li><strong>{{ msg.username }}</strong>: {{ msg.content }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No messages yet. Be the first to post!</p>
+    {% endif %}
 </body>
 </html>
