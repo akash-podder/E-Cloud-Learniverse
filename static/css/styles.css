@@ -91,6 +91,16 @@ li:hover {
     box-shadow: 0px 5px 25px rgba(0,0,0,0.1);
 }
 
+p {
+    text-align: center;
+    background: #fff;
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 3px 15px rgba(0,0,0,0.05);
+    transition: 0.3s;
+}
+
 
 /*--------------------------------------------------------------
 # Responsive

@@ -1,12 +1,13 @@
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 from sqlalchemy.orm import declarative_base
+from database.config import settings
 
 # -------------------------
 # Database configuration
 # -------------------------
-DATABASE_URL = "postgresql+asyncpg://postgres:postgres@localhost:5433/e_cloud_learniverse_db"
+DATABASE_URL = settings.DATABASE_URL
 
-# Base class for models (must be defined first)
+# Base class for models
 Base = declarative_base()
 
 # Create engine

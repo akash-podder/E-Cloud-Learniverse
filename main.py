@@ -49,4 +49,4 @@ async def add_message(
     await db.commit()
     await db.refresh(new_msg)
     # Redirect to refresh message list
-    return RedirectResponse(url="/index", status_code=303)
+    return RedirectResponse(url="/", status_code=303)
