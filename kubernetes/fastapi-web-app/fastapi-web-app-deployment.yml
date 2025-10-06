@@ -22,6 +22,11 @@ spec:
       labels:
         ramos-app-name: fastapi-web-app-e-cloud-pod # 👈 this Must Match with "matchLabels" KEY-VALUE pair
     spec:
+      # The initContainer runs a simple shell loop that waits until the TCP port on the Postgres service (postgres-service:5432) is open.
+      initContainers:
+          - name: wait-for-postgres
+            image: busybox
+            command: ['sh', '-c', 'until nc -z postgres-e-cloud-service 5432; do echo "waiting for postgres"; sleep 2; done;']
       containers:
         - name: e-cloud-learniverse-pod
           image: e-cloud-fastapi-docker-image

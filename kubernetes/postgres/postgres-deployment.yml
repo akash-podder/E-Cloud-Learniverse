@@ -36,3 +36,27 @@ spec:
               value: "e_cloud_learniverse_db"
           ports:
             - containerPort: 5432
+          
+          # 👇 Native Kubernetes readiness probe
+          # FastAPI initContainer will keep waiting until this becomes “Ready”.
+          readinessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - postgres
+            initialDelaySeconds: 5   # Wait 5s before first check
+            periodSeconds: 5         # Check every 5s
+            timeoutSeconds: 2        # Each check must complete in 2s
+            failureThreshold: 3      # Mark pod Unready after 3 fails
+            successThreshold: 1      # Mark Ready after 1 success
+
+          # (Optional but recommended)
+          livenessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - postgres
+            initialDelaySeconds: 30  # Wait longer before first check
+            periodSeconds: 10

@@ -21,6 +21,11 @@ At first get the Current Cluster Name what "kubectl" is pointing to
 kubectl config current-context
 ```
 
+At first build the image
+```bash
+sudo docker build --tag e-cloud-fastapi-docker-image .
+```
+
 Load `e-cloud-fastapi-docker-image` to locally in `mac-cluster-test`
 ```bash
 kind load docker-image e-cloud-fastapi-docker-image:latest --name mac-cluster-test
