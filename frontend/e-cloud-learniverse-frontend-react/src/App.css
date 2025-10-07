@@ -1,0 +1,139 @@
+/*--------------------------------------------------------------
+# General
+--------------------------------------------------------------*/
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Open Sans", sans-serif;
+    color: #444;
+    background-color: #f8fcf9;
+}
+
+#root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+}
+
+.logo {
+  height: 40px;
+  width: 40px;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+
+h1 {
+    color: #5cb874; /* Green color matching your previous theme */
+    font-family: "Raleway", sans-serif; /* Optional: match the theme font */
+    text-align: center; /* Optional: center the heading */
+    margin-top: 30px; /* Optional: spacing from top */
+    font-size: 36px;
+}
+
+h2 {
+    text-align: center; /* Optional: center the heading */
+    margin-top: 40px;
+    font-size: 28px;
+}
+
+/*--------------------------------------------------------------
+# Form Styles
+--------------------------------------------------------------*/
+form {
+    max-width: 600px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 20px 30px;
+    border-radius: 8px;
+    box-shadow: 0px 5px 30px rgba(0, 0, 0, 0.08);
+    font-family: "Open Sans", sans-serif; /* apply to the form as well */
+}
+
+form input[type="text"],
+form textarea {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: 0.3s;
+    font-family: "Open Sans", sans-serif; /* ensure same font */
+}
+
+form button {
+    background-color: #5cb874;
+    color: #fff;
+    border: none;
+    padding: 10px 25px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-family: "Open Sans", sans-serif; /* ensure same font */
+}
+
+
+/*--------------------------------------------------------------
+# Messages List
+--------------------------------------------------------------*/
+ul {
+    list-style: none;
+    padding: 0;
+    max-width: 700px;
+    margin: 20px auto;
+}
+
+li {
+    background: #fff;
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 3px 15px rgba(0,0,0,0.05);
+    transition: 0.3s;
+}
+
+li:hover {
+    box-shadow: 0px 5px 25px rgba(0,0,0,0.1);
+}
+
+p {
+    text-align: center;
+    background: #fff;
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 3px 15px rgba(0,0,0,0.05);
+    transition: 0.3s;
+}
+
+
+/*--------------------------------------------------------------
+# Responsive
+--------------------------------------------------------------*/
+@media (max-width: 768px) {
+    h1 {
+        font-size: 28px;
+    }
+    h2 {
+        font-size: 22px;
+    }
+    form {
+        padding: 15px 20px;
+    }
+}
