@@ -1,7 +1,7 @@
 # Multi-stage build for React frontend
 
 # Stage 1: Build the React application
-FROM node:18-alpine AS first_stage_react_app_builder
+FROM node:22-alpine AS first_stage_react_app_builder
 
 WORKDIR /app
 
