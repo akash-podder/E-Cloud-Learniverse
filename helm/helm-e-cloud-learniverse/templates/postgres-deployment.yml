@@ -1,0 +1,65 @@
+# ------------------------
+# Postgres Deployment Object
+# ------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.postgres.name }}
+  labels:
+    messi-db-app: {{ .Values.postgres.name }}-deployment
+
+spec:
+  replicas: {{ .Values.postgres.replicaCount }}
+  selector:
+    matchLabels:
+      messi-db-app: {{ .Values.postgres.labels.app }}
+
+  # This section defines the Pod template (metadata + spec)
+  template:
+    metadata:
+      labels:
+        messi-db-app: {{ .Values.postgres.labels.app }}
+    spec:
+      containers:
+        - name: {{ .Values.postgres.container.name }}
+          image: {{ .Values.postgres.image.repository }}:{{ .Values.postgres.image.tag }}
+          imagePullPolicy: {{ .Values.postgres.image.pullPolicy }}
+          env:
+            - name: POSTGRES_USER
+              value: {{ .Values.postgres.env.postgresUser | quote }}
+            - name: POSTGRES_PASSWORD
+              value: {{ .Values.postgres.env.postgresPassword | quote }}
+            - name: POSTGRES_DB
+              value: {{ .Values.postgres.env.postgresDb | quote }}
+          ports:
+            - containerPort: {{ .Values.postgres.container.port }}
+
+          {{- if .Values.postgres.readinessProbe.enabled }}
+          # 👇 Native Kubernetes readiness probe
+          # FastAPI initContainer will keep waiting until this becomes "Ready".
+          readinessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - {{ .Values.postgres.env.postgresUser }}
+            initialDelaySeconds: {{ .Values.postgres.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.postgres.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.postgres.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.postgres.readinessProbe.failureThreshold }}
+            successThreshold: {{ .Values.postgres.readinessProbe.successThreshold }}
+          {{- end }}
+
+          {{- if .Values.postgres.livenessProbe.enabled }}
+          # (Optional but recommended)
+          livenessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - {{ .Values.postgres.env.postgresUser }}
+            initialDelaySeconds: {{ .Values.postgres.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.postgres.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.postgres.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.postgres.livenessProbe.failureThreshold }}
+          {{- end }}

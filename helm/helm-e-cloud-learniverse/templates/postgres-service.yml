@@ -1,0 +1,17 @@
+# ------------------------
+# Postgres Service Object
+# ------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.postgres.service.name }}
+spec:
+  type: {{ .Values.postgres.service.type }}
+  selector:
+    # 👈 Must be "Pod" names, NOT "Deployment" Name
+    # 👈 Must CUSTOM KEY-VALUE Pairs of "Pod"
+    messi-db-app: {{ .Values.postgres.labels.app }}
+  ports:
+    - protocol: TCP
+      port: {{ .Values.postgres.service.port }}
+      targetPort: {{ .Values.postgres.service.targetPort }}

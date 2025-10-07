@@ -1,0 +1,56 @@
+🚀 E-Cloud Learniverse FastAPI Application Deployed!
+
+Release Name: {{ .Release.Name }}
+Namespace: {{ .Release.Namespace }}
+
+📦 Deployed Components:
+- FastAPI Web App ({{ .Values.fastapi.replicaCount }} replicas)
+- PostgreSQL Database ({{ .Values.postgres.replicaCount }} replica)
+
+🌐 Access Your Application:
+
+{{- if contains "NodePort" .Values.fastapi.service.type }}
+1. Using NodePort:
+   Access at: http://localhost:{{ .Values.fastapi.service.nodePort }}
+
+2. Using Port Forward:
+   Run: kubectl port-forward service/{{ .Values.fastapi.service.name }} 8002:{{ .Values.fastapi.service.port }}
+   Access at: http://localhost:8002
+
+{{- else if contains "LoadBalancer" .Values.fastapi.service.type }}
+NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+      You can watch its status by running:
+      kubectl get svc --namespace {{ .Release.Namespace }} {{ .Values.fastapi.service.name }} --watch
+
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ .Values.fastapi.service.name }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+  echo http://$SERVICE_IP:{{ .Values.fastapi.service.port }}
+
+{{- else if contains "ClusterIP" .Values.fastapi.service.type }}
+Run port-forward to access the application:
+  kubectl port-forward service/{{ .Values.fastapi.service.name }} 8002:{{ .Values.fastapi.service.port }}
+
+Then access at: http://localhost:8002
+{{- end }}
+
+🔍 Useful Commands:
+
+Check pod status:
+  kubectl get pods -l ramos-app-name={{ .Values.fastapi.labels.app }}
+
+Check logs:
+  kubectl logs -l ramos-app-name={{ .Values.fastapi.labels.app }}
+
+Check database:
+  kubectl get pods -l messi-db-app={{ .Values.postgres.labels.app }}
+
+Release info:
+  helm status {{ .Release.Name }}
+  helm get values {{ .Release.Name }}
+
+Upgrade:
+  helm upgrade {{ .Release.Name }} helm/helm-e-cloud-learniverse
+
+Uninstall:
+  helm uninstall {{ .Release.Name }}
+
+Happy coding! 🎉

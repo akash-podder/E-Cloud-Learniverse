@@ -1,0 +1,87 @@
+# Default values for helm-e-cloud-learniverse.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# FastAPI Web Application Configuration
+fastapi:
+  name: fastapi-web-app-e-cloud-deployment
+  replicaCount: 2
+
+  image:
+    repository: e-cloud-fastapi-docker-image
+    tag: latest
+    pullPolicy: Never
+
+  container:
+    name: e-cloud-learniverse-pod
+    port: 9998
+
+  labels:
+    app: fastapi-web-app-e-cloud-pod
+
+  env:
+    databaseUser: postgres
+    databasePassword: postgres
+    databaseHost: postgres-e-cloud-service
+    databasePort: "5432"
+    databaseName: e_cloud_learniverse_db
+
+  service:
+    name: fastapi-web-app-service
+    type: NodePort
+    port: 80
+    targetPort: 9998
+    nodePort: 30004
+
+  initContainer:
+    enabled: true
+    image: busybox
+    postgresServiceName: postgres-e-cloud-service
+    postgresPort: 5432
+
+# PostgreSQL Database Configuration
+postgres:
+  name: postgres
+  replicaCount: 1
+
+  image:
+    repository: postgres
+    tag: "17"
+    pullPolicy: IfNotPresent
+
+  container:
+    name: my-postgres-pod
+    port: 5432
+
+  labels:
+    app: postgres-e-cloud-pod
+
+  env:
+    postgresUser: postgres
+    postgresPassword: postgres
+    postgresDb: e_cloud_learniverse_db
+
+  service:
+    name: postgres-e-cloud-service
+    type: ClusterIP
+    port: 5432
+    targetPort: 5432
+
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    timeoutSeconds: 2
+    failureThreshold: 3
+    successThreshold: 1
+
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 2
+    failureThreshold: 3
+
+# Global configuration
+global:
+  namespace: default

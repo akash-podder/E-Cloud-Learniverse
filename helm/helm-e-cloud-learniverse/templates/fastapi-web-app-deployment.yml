@@ -1,0 +1,45 @@
+# ------------------------
+# FastAPI Deployment Object
+# ------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.fastapi.name }}
+  labels:
+    ramos-app-name: {{ .Values.fastapi.name }}
+
+spec:
+  replicas: {{ .Values.fastapi.replicaCount }}
+  selector:
+    matchLabels:
+      ramos-app-name: {{ .Values.fastapi.labels.app }}
+  # This section defines the Pod template (metadata + spec)
+  template:
+    metadata:
+      labels:
+        ramos-app-name: {{ .Values.fastapi.labels.app }}
+    spec:
+      {{- if .Values.fastapi.initContainer.enabled }}
+      # The initContainer runs a simple shell loop that waits until the TCP port on the Postgres service is open.
+      initContainers:
+          - name: wait-for-postgres
+            image: {{ .Values.fastapi.initContainer.image }}
+            command: ['sh', '-c', 'until nc -z {{ .Values.fastapi.initContainer.postgresServiceName }} {{ .Values.fastapi.initContainer.postgresPort }}; do echo "waiting for postgres"; sleep 2; done;']
+      {{- end }}
+      containers:
+        - name: {{ .Values.fastapi.container.name }}
+          image: {{ .Values.fastapi.image.repository }}:{{ .Values.fastapi.image.tag }}
+          imagePullPolicy: {{ .Values.fastapi.image.pullPolicy }}
+          env:
+            - name: DATABASE_USER
+              value: {{ .Values.fastapi.env.databaseUser | quote }}
+            - name: DATABASE_PASSWORD
+              value: {{ .Values.fastapi.env.databasePassword | quote }}
+            - name: DATABASE_HOST
+              value: {{ .Values.fastapi.env.databaseHost | quote }}
+            - name: DATABASE_PORT
+              value: {{ .Values.fastapi.env.databasePort | quote }}
+            - name: DATABASE_NAME
+              value: {{ .Values.fastapi.env.databaseName | quote }}
+          ports:
+            - containerPort: {{ .Values.fastapi.container.port }}
