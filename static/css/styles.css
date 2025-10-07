@@ -15,6 +15,13 @@ body {
     padding: 0;
 }
 
+.logo {
+  height: 40px;
+  width: 40px;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
 h1 {
     color: #5cb874; /* Green color matching your previous theme */
     font-family: "Raleway", sans-serif; /* Optional: match the theme font */
