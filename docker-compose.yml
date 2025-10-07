@@ -1,6 +1,28 @@
 version: "3.8"
 
 services:
+  # React Frontend Service
+  react_frontend:
+    build:
+      context: ./frontend/e-cloud-learniverse-frontend-react
+      dockerfile: Dockerfile
+      args:
+        VITE_BACKEND_API_BASE_URL: http://localhost:8002/api
+    image: e_cloud_learniverse_react_image:latest
+    container_name: react_learniverse_container
+    ports:
+      - "3000:80"
+    networks:
+      - fastapi_network
+    depends_on:
+      - fastapi_web_app
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+
+  # FastAPI Backend Service
   fastapi_web_app:
     build: .
     volumes:
@@ -21,6 +43,7 @@ services:
     depends_on:
       - learniverse_db
 
+  # PostgreSQL Database Service
   learniverse_db:
     image: postgres:15
     volumes:
