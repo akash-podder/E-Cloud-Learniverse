@@ -24,9 +24,11 @@ services:
 
   # FastAPI Backend Service
   fastapi_web_app:
-    build: .
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     volumes:
-      - .:/web_app
+      - ./backend:/web_app
     ports:
       - "8002:9998"
     image: e_cloud_learniverse_fastapi_image:latest

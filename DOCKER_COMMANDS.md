@@ -12,12 +12,12 @@ sudo docker run -d --name my-postgres-container-fastapi --network fastapi-networ
 
 ### build image
 ```bash
-sudo docker build --tag e-cloud-fastapi-docker-image .
+sudo docker build --tag e-cloud-fastapi-docker-image ./backend
 ```
 
 ### run image on (Host---> 8002 Port & Inside Container's Port 9998)
 ```bash
-sudo docker run --rm --name my-fastapi-web-container --network fastapi-network --publish 8002:9998 -v $(pwd)/.env_docker:/web_app/.env e-cloud-fastapi-docker-image
+sudo docker run --rm --name my-fastapi-web-container --network fastapi-network --publish 8002:9998 -v $(pwd)/backend/.env_docker:/web_app/.env e-cloud-fastapi-docker-image
 ```
 
 ### Going into the Docker Container

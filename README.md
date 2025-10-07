@@ -49,16 +49,18 @@ git clone https://github.com/akash-podder/E-Cloud-Learniverse.git
    ```bash
    python -m venv my_venv
    source my_venv/bin/activate
-   pip install -r requirements.txt
+   pip install -r backend/requirements.txt
    ```
 
 3. **Run in Development Mode**
    ```bash
+   cd backend
    fastapi dev main.py
    ```
 
 4. **Run with Uvicorn (Production)**
    ```bash
+   cd backend
    uvicorn main:app --host 0.0.0.0 --port 8000 --workers 4 --reload
    ```
 
@@ -81,13 +83,13 @@ sudo docker run -d --name my-postgres-container-fastapi \
   postgres:17
 
 # Build application image
-sudo docker build --tag e-cloud-fastapi-docker-image .
+sudo docker build --tag e-cloud-fastapi-docker-image ./backend
 
 # Run application container
 sudo docker run --rm --name my-fastapi-web-container \
   --network fastapi-network \
   --publish 8002:9998 \
-  -v $(pwd)/.env_docker:/web_app/.env \
+  -v $(pwd)/backend/.env_docker:/web_app/.env \
   e-cloud-fastapi-docker-image
 ```
 
@@ -242,4 +244,4 @@ pip install --no-build-isolation --only-binary :all: psycopg2-binary sqlalchemy
 - [Kind Commands](kubernetes/KIND_COMMANDS.md) - Local Kubernetes cluster setup
 - [Helm Commands](helm/HELM_COMMANDS.md) - Complete Helm deployment guide
 - [Helm Theory](helm/HELM_THEORY.md) - Helm concepts and built-in variables
-- [FastAPI Setup](FASTAPI_README.md) - FastAPI development setup
+- [FastAPI Setup](backend/FASTAPI_README.md) - FastAPI development setup

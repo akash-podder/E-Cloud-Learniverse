@@ -23,7 +23,7 @@ kubectl config current-context
 
 At first build the image
 ```bash
-sudo docker build --tag e-cloud-fastapi-docker-image .
+sudo docker build --tag e-cloud-fastapi-docker-image ./backend
 ```
 
 Load `e-cloud-fastapi-docker-image` to locally in `mac-cluster-test`
