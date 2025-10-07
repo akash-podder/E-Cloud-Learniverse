@@ -86,22 +86,30 @@ backend/
    DATABASE_USER=postgres
    DATABASE_PASSWORD=postgres
    DATABASE_HOST=localhost
-   DATABASE_PORT=5432
+   DATABASE_PORT=5433
    DATABASE_NAME=e_cloud_learniverse_db
    ```
 
 4. **Start PostgreSQL** (if not using Docker)
+Localhost maybe already running a Postgres server in Port:5432, that's why we are using `5433` Port instead for postgres docker container
    ```bash
    # Using Homebrew (macOS)
-   brew services start postgresql@15
+   brew services start postgresql@17
 
    # Or use Docker
    docker run -d --name postgres-dev \
      -e POSTGRES_USER=postgres \
      -e POSTGRES_PASSWORD=postgres \
      -e POSTGRES_DB=e_cloud_learniverse_db \
-     -p 5432:5432 \
-     postgres:15
+     -p 5433:5432 \
+     postgres:17
+   
+   docker run -it --rm --name postgres-dev \
+    -e POSTGRES_USER=postgres \
+    -e POSTGRES_PASSWORD=postgres \
+    -e POSTGRES_DB=e_cloud_learniverse_db \
+    -p 5433:5432 \
+    postgres:17
    ```
 
 5. **Run the Application**
