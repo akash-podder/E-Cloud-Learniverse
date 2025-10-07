@@ -4,7 +4,7 @@
 
 #### To Clone the Repository
 ```bash
-git clone https://github.com/akash-podder/E-Cloud-FastAPI-Learniverse.git
+git clone https://github.com/akash-podder/E-Cloud-Learniverse.git
 ```
 
 **E-Cloud-Learniverse** is a comprehensive end-to-end web application that demonstrates modern cloud-native development practices and container orchestration. This project showcases the complete journey from development to deployment using industry-standard tools and technologies.
