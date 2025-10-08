@@ -5,9 +5,8 @@ FROM node:22-alpine AS first_stage_react_app_builder
 
 WORKDIR /app
 
-# Accept build argument for API URL
-ARG VITE_BACKEND_API_BASE_URL=http://localhost:8000/api
-ENV VITE_BACKEND_API_BASE_URL=$VITE_BACKEND_API_BASE_URL
+# Copy environment file and source variables
+COPY .env_docker .env
 
 # Copy package files
 COPY package*.json ./
