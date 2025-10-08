@@ -21,7 +21,7 @@ At first get the Current Cluster Name what "kubectl" is pointing to
 kubectl config current-context
 ```
 
-At first build the image
+### First build `Backend` image and load in `kind` Cluster
 ```bash
 sudo docker build --tag e-cloud-fastapi-docker-image ./backend
 ```
@@ -29,6 +29,16 @@ sudo docker build --tag e-cloud-fastapi-docker-image ./backend
 Load `e-cloud-fastapi-docker-image` to locally in `mac-cluster-test`
 ```bash
 kind load docker-image e-cloud-fastapi-docker-image:latest --name mac-cluster-test
+```
+
+### Build `Frontend` image and load in `kind` Cluster
+```bash
+sudo docker build --tag reactjs-frontend-e-cloud-docker-image ./frontend
+```
+
+Load `reactjs-frontend-e-cloud-docker-image` to locally in `mac-cluster-test`
+```bash
+kind load docker-image reactjs-frontend-e-cloud-docker-image:latest --name mac-cluster-test
 ```
 
 ## Commands for "Pod" Object

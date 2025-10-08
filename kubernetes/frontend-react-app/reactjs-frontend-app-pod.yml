@@ -1,0 +1,19 @@
+# ------------------------
+# ReactJS Pod, This is for testing single Pod, we will use ReactJS "Deployment" Object
+# ------------------------
+apiVersion: v1
+kind: Pod
+metadata:
+  name: reactjs-e-cloud-learniverse-frontend
+  labels:
+    real-madrid-app: reactjs-frontend-e-cloud-learniverse-pod
+spec:
+  containers:
+    - name: reactjs-frontend-e-cloud-learniverse-pod
+      image: reactjs-frontend-e-cloud-docker-image
+      imagePullPolicy: Never
+      env:
+        - name: VITE_BACKEND_API_BASE_URL
+          value: "http://fastapi-web-app-service:8000/api"  # 👈 Must be the "Service" name of "FastAPI with proper URL format"
+      ports:
+        - containerPort: 80

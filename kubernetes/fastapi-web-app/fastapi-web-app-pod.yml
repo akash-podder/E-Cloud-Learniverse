@@ -1,10 +1,12 @@
 # ------------------------
-# FastAPI Pod, This is for Testing, we will use FastAPI Deployment Object
+# FastAPI Pod, This is for testing single Pod, we will use FastAPI "Deployment" Object
 # ------------------------
 apiVersion: v1
 kind: Pod
 metadata:
   name: e-cloud-learniverse
+  labels:
+      ramos-app-name: fastapi-web-app-e-cloud-pod
 spec:
   containers:
     - name: e-cloud-learniverse-pod
@@ -16,7 +18,7 @@ spec:
         - name: DATABASE_PASSWORD
           value: "postgres"
         - name: DATABASE_HOST
-          value: "postgres-e-cloud-service"   # 👈 Must be the Service name of "Postgres"
+          value: "postgres-e-cloud-service"   # 👈 Must be the "Service" name of "Postgres"
         - name: DATABASE_PORT
           value: "5432"
         - name: DATABASE_NAME

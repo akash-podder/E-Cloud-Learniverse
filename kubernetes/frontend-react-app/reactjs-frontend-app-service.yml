@@ -1,0 +1,17 @@
+# ------------------------
+# ReactJS Frontend App Service Object
+# ------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: reactjs-frontend-app-service
+spec:
+  selector:
+    # 👈 Must match Pod labels
+    real-madrid-app: reactjs-frontend-e-cloud-learniverse-pod # 👈 this Must Match with "labels" KEY-VALUE pair of "POD"
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 3000          # Kubernetes-Cluster-internal port other Pods use to reach this Service
+      targetPort: 80  # Port inside your ReactJS Pod Container (as it is ran by "nginx" that's why Docker image exposes Port 80)
+      nodePort: 30005   # Port you expect to access from outside (also from your Local machine like: MacOS)

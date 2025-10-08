@@ -1,0 +1,35 @@
+# ------------------------
+# ReactJS Frontend App Deployment Object
+# ------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reactjs-frontend-deployment
+  labels:
+    deploy-react-app: reactjs-frontend-e-cloud-learniverse
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      real-madrid-app: reactjs-frontend-e-cloud-learniverse-pod
+  template:
+    metadata:
+      labels:
+        real-madrid-app: reactjs-frontend-e-cloud-learniverse-pod
+    spec:
+      containers:
+        - name: reactjs-frontend-e-cloud-learniverse-pod
+          image: reactjs-frontend-e-cloud-docker-image
+          imagePullPolicy: Never
+          env:
+            - name: VITE_BACKEND_API_BASE_URL
+              value: "http://fastapi-web-app-service:8000/api"  # 👈 Must be the "Service" name of "FastAPI with proper URL format"
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
