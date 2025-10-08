@@ -33,7 +33,7 @@ kind load docker-image e-cloud-fastapi-docker-image:latest --name mac-cluster-te
 
 ### Build `Frontend` image and load in `kind` Cluster
 ```bash
-sudo docker build --tag reactjs-frontend-e-cloud-docker-image ./frontend
+sudo docker build --tag reactjs-frontend-e-cloud-docker-image ./frontend/e-cloud-learniverse-frontend-react
 ```
 
 Load `reactjs-frontend-e-cloud-docker-image` to locally in `mac-cluster-test`
@@ -45,18 +45,28 @@ kind load docker-image reactjs-frontend-e-cloud-docker-image:latest --name mac-c
 ```bash
 kubectl apply -f kubernetes/postgres/postgres-deployment.yml       
 kubectl apply -f kubernetes/postgres/postgres-service.yml
-kubectl apply -f kubernetes/fastapi-web-app/fastapi-web-app-pod.yml 
+kubectl apply -f kubernetes/fastapi-web-app/fastapi-web-app-pod.yml
+kubectl apply -f kubernetes/frontend-react-app/reactjs-frontend-app-pod.yml
+kubectl apply -f kubernetes/frontend-react-app/reactjs-frontend-app-service.yml
 ```
 
+To delete all the Kubernetes Objects
 ```bash
 kubectl delete -f kubernetes/postgres/postgres-deployment.yml       
 kubectl delete -f kubernetes/postgres/postgres-service.yml
-kubectl delete -f kubernetes/fastapi-web-app/fastapi-web-app-pod.yml 
+kubectl delete -f kubernetes/fastapi-web-app/fastapi-web-app-pod.yml
+kubectl delete -f kubernetes/frontend-react-app/reactjs-frontend-app-pod.yml
+kubectl delete -f kubernetes/frontend-react-app/reactjs-frontend-app-service.yml
 ```
 
-Port Forward the "Pod" for locahost 8002 to Pod's 9998
+Port Forward the `Backend Service` for locahost 8002 to Pod's 9998
 ```bash
 kubectl port-forward pod/e-cloud-learniverse 8002:9998
+```
+
+Port Forward the `Frontend Service` for localhost 3000 to Service's 3000
+```bash
+kubectl port-forward service/reactjs-frontend-app-service 3000:3000
 ```
 
 ## Commands for "Deployment" Object
@@ -64,20 +74,29 @@ kubectl port-forward pod/e-cloud-learniverse 8002:9998
 kubectl apply -f kubernetes/postgres/postgres-deployment.yml       
 kubectl apply -f kubernetes/postgres/postgres-service.yml
 kubectl apply -f kubernetes/fastapi-web-app/fastapi-web-app-deployment.yml
-kubectl apply -f kubernetes/fastapi-web-app/fastapi-web-app-service.yml 
+kubectl apply -f kubernetes/fastapi-web-app/fastapi-web-app-service.yml
+kubectl apply -f kubernetes/frontend-react-app/reactjs-frontend-app-deployment.yml
+kubectl apply -f kubernetes/frontend-react-app/reactjs-frontend-app-service.yml
 ```
 
-
+To delete all the Kubernetes Objects
 ```bash
 kubectl delete -f kubernetes/postgres/postgres-deployment.yml       
 kubectl delete -f kubernetes/postgres/postgres-service.yml
 kubectl delete -f kubernetes/fastapi-web-app/fastapi-web-app-deployment.yml
-kubectl delete -f kubernetes/fastapi-web-app/fastapi-web-app-service.yml 
+kubectl delete -f kubernetes/fastapi-web-app/fastapi-web-app-service.yml
+kubectl delete -f kubernetes/frontend-react-app/reactjs-frontend-app-deployment.yml
+kubectl delete -f kubernetes/frontend-react-app/reactjs-frontend-app-service.yml
 ```
 
-Port Forward the "Service" for locahost 8002 to Service Container's 9998
+Port Forward the `Backend Service` for locahost 8002 to Service Container's 80
 ```bash
 kubectl port-forward service/fastapi-web-app-service 8002:80
+```
+
+Port Forward the `Frontend Service` for localhost 3000 to Service's 3000
+```bash
+kubectl port-forward service/reactjs-frontend-app-service 3000:3000
 ```
 
 ### Kill Process

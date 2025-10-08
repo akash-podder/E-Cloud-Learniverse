@@ -2,28 +2,28 @@
 
 ## Project Overview
 
+**E-Cloud-Learniverse** is a comprehensive end-to-end web application that demonstrates modern cloud-native development practices and container orchestration. This project showcases the complete journey from development to deployment using industry-standard tools and technologies.
+
 #### To Clone the Repository
 ```bash
 git clone https://github.com/akash-podder/E-Cloud-Learniverse.git
 ```
 
-**E-Cloud-Learniverse** is a comprehensive end-to-end web application that demonstrates modern cloud-native development practices and container orchestration. This project showcases the complete journey from development to deployment using industry-standard tools and technologies.
-
 ### Key Features & Achievements
 
-- **End-to-End Web Application**: Developed a complete web application with FastAPI backend and PostgreSQL database
+- **End-to-End Web Application**: Developed a complete web application with FastAPI backend, ReactJS Frontend and PostgreSQL database
 - **Containerization**: Containerized with Docker for consistent deployments and scalability
 - **Kubernetes Orchestration**: Deployed on Kubernetes using Helm charts, demonstrating expertise in container orchestration
 - **Cloud-Native DevOps**: Implements modern DevOps practices with cloud-native technologies
 
 ### Technologies Used
 
+- **Frontend**: React.js with Vite (Modern web UI framework)
 - **Backend**: FastAPI (Python web framework)
 - **Database**: PostgreSQL 17
 - **Containerization**: Docker & Docker Compose
 - **Orchestration**: Kubernetes
 - **Package Management**: Helm Charts
-- **Local Development**: Kind (Kubernetes in Docker)
 
 ---
 
@@ -31,209 +31,111 @@ git clone https://github.com/akash-podder/E-Cloud-Learniverse.git
 
 ### Prerequisites
 
-- Python 3.8+
-- Docker & Docker Compose
-- Kubernetes (kubectl)
-- Helm 3.x
-- Kind (for local Kubernetes cluster)
+- Python 3.8+, Node 22.0+
+- Docker, Kubernetes (kubectl), Helm 3.x
+- Kind (for local development)
 
 ### Local Development Setup
 
-1. **Clone the Repository**
+1. **Clone & Setup**
    ```bash
-   git clone https://github.com/akash-podder/E-Cloud-FastAPI-Learniverse.git
-   cd E-Cloud-FastAPI-Learniverse
-   ```
-
-2. **Create Virtual Environment**
-   ```bash
+   git clone https://github.com/akash-podder/E-Cloud-Learniverse.git
+   cd E-Cloud-Learniverse
+   
+   # Backend setup
    python -m venv my_venv
    source my_venv/bin/activate
    pip install -r backend/requirements.txt
+   
+   # Frontend setup
+   cd frontend/e-cloud-learniverse-frontend-react
+   npm install
    ```
 
-3. **Run in Development Mode**
+2. **Run Applications**
    ```bash
-   cd backend
-   fastapi dev main.py
-   ```
-
-4. **Run with Uvicorn (Production)**
-   ```bash
-   cd backend
-   uvicorn main:app --host 0.0.0.0 --port 8000 --workers 4 --reload
+   # Backend (in terminal 1)
+   cd backend && fastapi dev main.py
+   
+   # Frontend (in terminal 2)
+   cd frontend/e-cloud-learniverse-frontend-react && npm run dev
    ```
 
 ---
 
-## Docker Commands
-
-### Basic Docker Setup
+## Docker Quick Start
 
 ```bash
-# Create Docker network
-sudo docker network create fastapi-network
-
-# Run PostgreSQL container
-sudo docker run -d --name my-postgres-container-fastapi \
-  --network fastapi-network \
-  -e POSTGRES_USER=postgres \
-  -e POSTGRES_PASSWORD=postgres \
-  -e POSTGRES_DB=e_cloud_learniverse_db \
-  postgres:17
-
-# Build application image
+# Build images
 sudo docker build --tag e-cloud-fastapi-docker-image ./backend
+sudo docker build --tag reactjs-frontend-e-cloud-docker-image ./frontend/e-cloud-learniverse-frontend-react
 
-# Run application container
-sudo docker run --rm --name my-fastapi-web-container \
-  --network fastapi-network \
-  --publish 8002:9998 \
-  -v $(pwd)/backend/.env_docker:/web_app/.env \
-  e-cloud-fastapi-docker-image
-```
-
-### Docker Compose
-
-```bash
-# Build and run with Docker Compose
+# Run with Docker Compose
 sudo docker-compose up --build
-
-# Run in background
-sudo docker-compose up -d
 ```
+
+See [Docker Commands](DOCKER_COMMANDS.md) for detailed setup.
 
 ---
 
-## Kubernetes Commands
-
-### Kind Cluster Setup
+## Kubernetes Quick Start
 
 ```bash
-# Install Kind and kubectl
-brew install kind kubectl
-
-# Create Kind cluster
+# Setup Kind cluster
 kind create cluster --name mac-cluster-test --image kindest/node:v1.30.6
 
-# Load Docker image to Kind cluster
+# Load images
 kind load docker-image e-cloud-fastapi-docker-image:latest --name mac-cluster-test
+kind load docker-image reactjs-frontend-e-cloud-docker-image:latest --name mac-cluster-test
+
+# Deploy all components
+kubectl apply -f kubernetes/postgres/
+kubectl apply -f kubernetes/fastapi-web-app/
+kubectl apply -f kubernetes/frontend-react-app/
+
+# Access applications
+kubectl port-forward service/fastapi-web-app-service 8002:80 &
+kubectl port-forward service/reactjs-frontend-app-service 3000:3000 &
 ```
 
-### Deploy with Kubernetes Manifests
-
-```bash
-# Apply PostgreSQL resources
-kubectl apply -f kubernetes/postgres/postgres-deployment.yml
-kubectl apply -f kubernetes/postgres/postgres-service.yml
-
-# Apply FastAPI application resources
-kubectl apply -f kubernetes/fastapi-web-app/fastapi-web-app-deployment.yml
-kubectl apply -f kubernetes/fastapi-web-app/fastapi-web-app-service.yml
-
-# Port forward to access application
-kubectl port-forward service/fastapi-web-app-service 8002:80
-```
-
-### Clean up Kubernetes Resources
-
-```bash
-kubectl delete -f kubernetes/postgres/postgres-deployment.yml
-kubectl delete -f kubernetes/postgres/postgres-service.yml
-kubectl delete -f kubernetes/fastapi-web-app/fastapi-web-app-deployment.yml
-kubectl delete -f kubernetes/fastapi-web-app/fastapi-web-app-service.yml
-```
+See [Kubernetes Commands](kubernetes/KUBERNETES_COMMANDS.md) for detailed instructions.
 
 ---
 
-## Helm Commands
-
-### Quick Helm Deployment
+## Helm Quick Start
 
 ```bash
-# Validate Helm chart
-helm lint helm/helm-e-cloud-learniverse
-
-# Dry run to preview deployment
-helm install e-cloud helm/helm-e-cloud-learniverse --dry-run --debug
-
-# Install application with Helm
+# Deploy with Helm
 helm install e-cloud helm/helm-e-cloud-learniverse
 
-# Check deployment status
+# Check status
 helm status e-cloud
-kubectl get all
 
-# Port forward to access application
+# Port forward
 kubectl port-forward service/fastapi-web-app-service 8002:80
-
-# Access application at http://localhost:8002
 ```
 
-### Environment-Specific Deployments
-
-```bash
-# Development environment
-helm install e-cloud-dev helm/helm-e-cloud-learniverse \
-  -f helm/helm-e-cloud-learniverse/values-dev.yml
-
-# Staging environment
-helm install e-cloud-staging helm/helm-e-cloud-learniverse \
-  -f helm/helm-e-cloud-learniverse/values-staging.yml
-
-# Production environment
-helm install e-cloud-prod helm/helm-e-cloud-learniverse \
-  -f helm/helm-e-cloud-learniverse/values-prod.yml
-```
-
-### Helm Management Commands
-
-```bash
-# List all releases
-helm list
-
-# Upgrade release
-helm upgrade e-cloud helm/helm-e-cloud-learniverse
-
-# Rollback to previous version
-helm rollback e-cloud
-
-# Uninstall release
-helm uninstall e-cloud
-```
+See [Helm Commands](helm/HELM_COMMANDS.md) for complete guide.
 
 ---
 
-## Useful Commands
+## Application Access
 
-### Kubernetes Utilities
+- **Frontend**: http://localhost:3000 (React.js UI)
+- **Backend API**: http://localhost:8002/api (FastAPI)
+- **API Docs**: http://localhost:8002/docs (Swagger UI)
+
+### Quick Commands
 
 ```bash
-# Check current context
-kubectl config current-context
-
-# Switch context
-kubectl config use-context kind-mac-cluster-test
-
 # View all resources
 kubectl get all
 
-# Check logs
-kubectl logs -l app=fastapi-web-app
-kubectl logs -l app=postgres
-
-# Kill port-forward processes (macOS)
+# Kill port-forwards
 pkill -f "kubectl port-forward"
-```
 
-### Database Commands
-
-```bash
-# Connect to PostgreSQL container
+# Database access
 kubectl exec -it deployment/postgres-deployment -- psql -U postgres -d e_cloud_learniverse_db
-
-# Install psycopg2 locally
-pip install --no-build-isolation --only-binary :all: psycopg2-binary sqlalchemy
 ```
 ---
 
