@@ -10,7 +10,7 @@ from typing import List
 
 from database.database_init import init_models, get_db
 from models import message_model
-from schemas import MessageCreate, MessageRead
+from schema.message_schema import MessageCreate, MessageUpdate, MessageRead
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -29,6 +29,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# =====================================================
+# for enabling "static" files and "Jinja" templates
+# =====================================================
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
@@ -37,7 +40,10 @@ templates = Jinja2Templates(directory="templates")
 async def root():
     return {"message": "Health is Okay"}
 
-# ----- MAIN VIEW -----
+# =====================================================
+# MAIN VIEW for FASTAPI Jinja Template FRONTEND
+# =====================================================
+
 # GET
 @app.get("/", response_class=HTMLResponse)
 async def show_index(request: Request, db: AsyncSession = Depends(get_db)):
@@ -62,6 +68,7 @@ async def add_message(
     await db.refresh(new_msg)
     # Redirect to refresh message list
     return RedirectResponse(url="/", status_code=303)
+
 
 
 # =====================================================
@@ -115,6 +122,33 @@ async def get_message(message_id: int, db: AsyncSession = Depends(get_db)):
     if not message:
         from fastapi import HTTPException
         raise HTTPException(status_code=404, detail="Message not found")
+    return message
+
+
+# PUT update message by ID - REST API endpoint
+@app.put("/api/messages/{message_id}", response_model=MessageRead)
+async def update_message(
+    message_id: int,
+    message_update: MessageUpdate,
+    db: AsyncSession = Depends(get_db)
+):
+    """
+    Update a message by ID
+    Request body: {"username": "string", "content": "string"}
+    Returns: Updated message
+    """
+    result = await db.execute(
+        select(message_model.Message).where(message_model.Message.id == message_id)
+    )
+    message = result.scalar_one_or_none()
+    if not message:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=404, detail="Message not found")
+    
+    message.username = message_update.username
+    message.content = message_update.content
+    await db.commit()
+    await db.refresh(message)
     return message
 
 

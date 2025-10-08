@@ -4,6 +4,10 @@ class MessageCreate(BaseModel):
     username: str
     content: str
 
+class MessageUpdate(BaseModel):
+    username: str
+    content: str
+
 class MessageRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
