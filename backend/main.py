@@ -23,8 +23,13 @@ app = FastAPI(lifespan=lifespan)
 # CORS middleware for React frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],  # React dev servers
-    allow_credentials=True,
+    allow_origins=[
+        "http://localhost:5173",  # Vite dev server
+        "http://localhost:3000",  # React dev server (alternative)
+        "http://localhost:30005", # Kubernetes NodePort for frontend
+        "*",                      # Allow all origins (for nginx proxy in Kubernetes)
+    ],
+    allow_credentials=False, #  According to CORS spec, you cannot use wildcard "*" with credentials enabled
     allow_methods=["*"],
     allow_headers=["*"],
 )

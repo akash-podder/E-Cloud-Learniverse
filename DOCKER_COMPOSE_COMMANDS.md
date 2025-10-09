@@ -12,12 +12,12 @@ The application consists of 3 services:
 ## Quick Start
 
 ### Build and Start All Services
-```bash
+```shell script
 docker-compose up --build
 ```
 
 ### Start in Background (Detached Mode)
-```bash
+```shell script
 docker-compose up -d --build
 ```
 
@@ -26,7 +26,7 @@ docker-compose up -d --build
 ## Individual Service Commands
 
 ### Build Specific Service
-```bash
+```shell script
 # Build frontend only
 docker-compose build react_frontend
 
@@ -35,7 +35,7 @@ docker-compose build fastapi_web_app
 ```
 
 ### Start Specific Service
-```bash
+```shell script
 # Start frontend only (and its dependencies)
 docker-compose up react_frontend
 
@@ -48,12 +48,12 @@ docker-compose up fastapi_web_app
 ## Service Management
 
 ### View Running Containers
-```bash
+```shell script
 docker-compose ps
 ```
 
 ### View Logs
-```bash
+```shell script
 # All services
 docker-compose logs
 
@@ -70,7 +70,7 @@ docker-compose logs --tail=50 -f
 ```
 
 ### Stop Services
-```bash
+```shell script
 # Stop all services (containers still exist)
 docker-compose stop
 
@@ -79,12 +79,12 @@ docker-compose stop react_frontend
 ```
 
 ### Start Stopped Services
-```bash
+```shell script
 docker-compose start
 ```
 
 ### Restart Services
-```bash
+```shell script
 # Restart all
 docker-compose restart
 
@@ -94,20 +94,20 @@ docker-compose restart fastapi_web_app
 
 ---
 
-## Cleanup Commands
+## Cleanup Commands for Docker Compose
 
 ### Stop and Remove Containers
-```bash
+```shell script
 docker-compose down
 ```
 
 ### Remove Containers, Networks, and Volumes
-```bash
+```shell script
 docker-compose down -v
 ```
 
 ### Remove Everything Including Images
-```bash
+```shell script
 docker-compose down --rmi all -v
 ```
 
@@ -118,13 +118,13 @@ docker-compose down --rmi all -v
 ### Rebuild After Code Changes
 
 **Frontend Changes:**
-```bash
+```shell script
 # Rebuild and restart frontend
 docker-compose up -d --build react_frontend
 ```
 
 **Backend Changes:**
-```bash
+```shell script
 # Backend has hot-reload enabled, no rebuild needed
 # If you need to rebuild:
 docker-compose up -d --build fastapi_web_app
@@ -142,7 +142,7 @@ docker-compose up -d --build fastapi_web_app
 ## Execute Commands Inside Containers
 
 ### Access Container Shell
-```bash
+```shell script
 # Frontend (Nginx container)
 docker-compose exec react_frontend sh
 
@@ -150,11 +150,11 @@ docker-compose exec react_frontend sh
 docker-compose exec fastapi_web_app sh
 
 # Database
-docker-compose exec learniverse_db bash
+docker-compose exec learniverse_db shell script
 ```
 
 ### Run Commands in Container
-```bash
+```shell script
 # Check FastAPI version
 docker-compose exec fastapi_web_app python -c "import fastapi; print(fastapi.__version__)"
 
@@ -170,22 +170,22 @@ docker-compose exec learniverse_db psql -U postgres -d e_cloud_learniverse_db -c
 ## Database Commands
 
 ### Connect to PostgreSQL
-```bash
+```shell script
 docker-compose exec learniverse_db psql -U postgres -d e_cloud_learniverse_db
 ```
 
 ### Database Backup
-```bash
+```shell script
 docker-compose exec learniverse_db pg_dump -U postgres e_cloud_learniverse_db > backup.sql
 ```
 
 ### Database Restore
-```bash
+```shell script
 docker-compose exec -T learniverse_db psql -U postgres -d e_cloud_learniverse_db < backup.sql
 ```
 
 ### Reset Database
-```bash
+```shell script
 # Stop and remove volumes
 docker-compose down -v
 
@@ -198,7 +198,7 @@ docker-compose up -d
 ## Health Checks
 
 ### Check Service Health
-```bash
+```shell script
 # View health status
 docker-compose ps
 
@@ -213,12 +213,12 @@ docker inspect postgres_learniverse_db_container --format='{{.State.Health.Statu
 ## Troubleshooting
 
 ### View Service Details
-```bash
+```shell script
 docker-compose config
 ```
 
 ### Check Port Conflicts
-```bash
+```shell script
 # Check if ports are in use
 lsof -i :3000  # Frontend
 lsof -i :8002  # Backend
@@ -226,18 +226,18 @@ lsof -i :5434  # Database
 ```
 
 ### Remove Orphan Containers
-```bash
+```shell script
 docker-compose down --remove-orphans
 ```
 
 ### Force Rebuild (No Cache)
-```bash
+```shell script
 docker-compose build --no-cache
 docker-compose up -d
 ```
 
 ### Network Issues
-```bash
+```shell script
 # Inspect network
 docker network inspect e-cloud-fastapi-learniverse_fastapi_network
 
@@ -251,13 +251,13 @@ docker-compose up -d
 ## Production Deployment
 
 ### Build for Production
-```bash
+```shell script
 # Build with production environment
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --build -d
 ```
 
 ### Scale Services
-```bash
+```shell script
 # Scale backend to 3 instances
 docker-compose up -d --scale fastapi_web_app=3
 ```
@@ -267,13 +267,13 @@ docker-compose up -d --scale fastapi_web_app=3
 ## Environment Variables
 
 ### Override API URL for Frontend
-```bash
+```shell script
 # Build with custom API URL
 docker-compose build --build-arg VITE_BACKEND_API_BASE_URL=http://api.production.com/api react_frontend
 ```
 
 ### Set Environment Variables
-```bash
+```shell script
 # Create .env file in project root
 DATABASE_USER=postgres
 DATABASE_PASSWORD=secretpassword
@@ -288,7 +288,7 @@ docker-compose up -d
 ## Common Workflows
 
 ### Full Rebuild
-```bash
+```shell script
 docker-compose down -v
 docker-compose build --no-cache
 docker-compose up -d
@@ -296,7 +296,7 @@ docker-compose logs -f
 ```
 
 ### Development Workflow
-```bash
+```shell script
 # Start all services
 docker-compose up -d
 
@@ -312,7 +312,7 @@ docker-compose up -d --build react_frontend
 ```
 
 ### Stop and Clean Everything
-```bash
+```shell script
 docker-compose down -v --rmi all
 docker system prune -a --volumes
 ```
