@@ -12,6 +12,6 @@ spec:
   type: NodePort
   ports:
     - protocol: TCP
-      port: 80          # Kubernetes-Cluster-internal port other Pods use to reach this Service
+      port: 8083          # Kubernetes-Cluster-internal port other Pods use to reach this Service
       targetPort: 9998  # Port inside your FastAPI Pod
       nodePort: 30004   # Port you expect to access from outside (also from your Local machine like: MacOS)

@@ -13,10 +13,14 @@ rm -rf helm-e-cloud-learniverse/templates/*
 
 Then Copy the `kubernetes` object file into Helm `Template` folder
 ```bash
-cp kubernetes/postgres/postgres-deployment.yml helm/helm-e-cloud-learniverse/templates/
-cp kubernetes/postgres/postgres-service.yml helm/helm-e-cloud-learniverse/templates/
-cp kubernetes/fastapi-web-app/fastapi-web-app-deployment.yml helm/helm-e-cloud-learniverse/templates/
-cp kubernetes/fastapi-web-app/fastapi-web-app-service.yml helm/helm-e-cloud-learniverse/templates/
+cp kubernetes/postgres/postgres-deployment.yml helm/helm-e-cloud-learniverse/templates/postgres-deployment.yml
+cp kubernetes/postgres/postgres-service.yml helm/helm-e-cloud-learniverse/templates/postgres-service.yml
+
+cp kubernetes/fastapi-web-app/fastapi-web-app-deployment.yml helm/helm-e-cloud-learniverse/templates/backend-fastapi-deployment.yml
+cp kubernetes/fastapi-web-app/fastapi-web-app-service.yml helm/helm-e-cloud-learniverse/templates/backend-fastapi-service.yml
+
+cp kubernetes/reactjs-frontend-app/reactjs-frontend-app-deployment.yml helm/helm-e-cloud-learniverse/templates/frontend-reactjs-deployment.yml
+cp kubernetes/reactjs-frontend-app/reactjs-frontend-app-service.yml helm/helm-e-cloud-learniverse/templates/frontend-reactjs-service.yml
 ```
 
 ---
@@ -282,23 +286,36 @@ Use tools like:
 
 ## 🧪 12. Testing Commands
 
-### Port-forward to access FastAPI service locally
+### Port-forward to access services locally
 ```bash
-kubectl port-forward service/fastapi-web-app-service 8002:80
+# Backend API
+kubectl port-forward service/backend-fastapi-service 8002:80
+
+# Frontend React App
+kubectl port-forward service/frontend-reactjs-service 3000:3000
 ```
 
 ### Access via NodePort (if using NodePort service type)
 ```bash
-# Get the NodePort
-kubectl get svc fastapi-web-app-service
+# Get the NodePorts
+kubectl get svc backend-fastapi-service
+kubectl get svc frontend-reactjs-service
 
-# Access at: http://localhost:30004
+# Access at:
+# Backend: http://localhost:30004
+# Frontend: http://localhost:30005
 ```
 
 ### Check logs
 ```bash
+# Backend logs
 kubectl logs -l ramos-app-name=fastapi-web-app-e-cloud-pod
-kubectl logs -l messi-db-app=postgres-e-cloud-pod
+
+# Frontend logs
+kubectl logs -l real-madrid-app=reactjs-frontend-e-cloud-learniverse-pod
+
+# Database logs
+kubectl logs -l app=postgres-e-cloud-pod
 ```
 
 ---
@@ -338,10 +355,14 @@ helm install e-cloud helm/helm-e-cloud-learniverse
 helm status e-cloud
 kubectl get all
 
-# 5. Port forward to access application
-kubectl port-forward service/fastapi-web-app-service 8002:80
+# 5. Port forward to access applications
+kubectl port-forward service/backend-fastapi-service 8002:80 &
+kubectl port-forward service/frontend-reactjs-service 3000:3000 &
 
-# 6. Access application at http://localhost:8002
+# 6. Access applications
+# Frontend: http://localhost:3000
+# Backend API: http://localhost:8002/api
+# API Docs: http://localhost:8002/docs
 ```
 
 ---

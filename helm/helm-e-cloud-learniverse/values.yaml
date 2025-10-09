@@ -29,7 +29,7 @@ fastapi:
   service:
     name: fastapi-web-app-service
     type: NodePort
-    port: 80
+    port: 8083          # Changed from 80 to 8083 for internal cluster communication
     targetPort: 9998
     nodePort: 30004
 
@@ -81,6 +81,44 @@ postgres:
     periodSeconds: 10
     timeoutSeconds: 2
     failureThreshold: 3
+
+# ReactJS Frontend Configuration
+frontend:
+  name: reactjs-frontend-deployment
+  replicaCount: 2
+
+  image:
+    repository: reactjs-frontend-e-cloud-docker-image
+    tag: kubernetes      # Use :kubernetes tag for Kubernetes builds with nginx proxy
+    pullPolicy: Never
+
+  container:
+    name: reactjs-frontend-e-cloud-learniverse-pod
+    port: 80
+
+  labels:
+    app: reactjs-frontend-e-cloud-learniverse-pod
+
+  # Note: With nginx reverse proxy, VITE_* env vars don't work at runtime
+  # The frontend image is built with VITE_BACKEND_API_BASE_URL=/api
+  # Nginx proxies /api requests to fastapi-web-app-service:8083
+  # env:
+  #   backendApiUrl: "http://fastapi-web-app-service:8083/api"
+
+  service:
+    name: reactjs-frontend-app-service
+    type: NodePort
+    port: 3000
+    targetPort: 80
+    nodePort: 30005
+
+  resources:
+    limits:
+      memory: "256Mi"
+      cpu: "200m"
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
 
 # Global configuration
 global:

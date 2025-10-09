@@ -1,6 +1,8 @@
 # Kubernetes Basic Commands
 
-svc == Shortform of "service"
+`svc` == Shortform of "service"
+
+`-n` Flag == Namespace Flag
 
 ```bash
 kubectl create ns example-apps → Creating Namespace called “example-apps”
@@ -33,19 +35,32 @@ kind load docker-image e-cloud-fastapi-docker-image:latest --name mac-cluster-te
 
 ### Build `Frontend` image and load in `kind` Cluster
 ```bash
-sudo docker build --tag reactjs-frontend-e-cloud-docker-image ./frontend/e-cloud-learniverse-frontend-react
+ sudo docker build --build-arg ENV_FILE=kubernetes -t reactjs-frontend-e-cloud-docker-image:kubernetes ./frontend/e-cloud-learniverse-frontend-react
 ```
 
 Load `reactjs-frontend-e-cloud-docker-image` to locally in `mac-cluster-test`
 ```bash
-kind load docker-image reactjs-frontend-e-cloud-docker-image:latest --name mac-cluster-test
+kind load docker-image reactjs-frontend-e-cloud-docker-image:kubernetes --name mac-cluster-test
+```
+
+## `Kind` remove images from Cluster
+`crictl` == `docker` command, but it is an Open Source CLI for any `Container Runtime` (example: `CRI-O`, `run-c`)
+
+`crictl` stands for `Container Runtime Interface CLI`.
+```bash
+docker exec mac-cluster-test-control-plane crictl rmi docker.io/library/e-cloud-fastapi-docker-image:latest
+docker exec mac-cluster-test-control-plane crictl rmi docker.io/library/reactjs-frontend-e-cloud-docker-image:latest
+docker exec mac-cluster-test-control-plane crictl rmi docker.io/library/postgres:17
 ```
 
 ## Commands for "Pod" Object
 ```bash
 kubectl apply -f kubernetes/postgres/postgres-deployment.yml       
 kubectl apply -f kubernetes/postgres/postgres-service.yml
+
 kubectl apply -f kubernetes/fastapi-web-app/fastapi-web-app-pod.yml
+kubectl apply -f kubernetes/fastapi-web-app/fastapi-web-app-service.yml
+
 kubectl apply -f kubernetes/frontend-react-app/reactjs-frontend-app-pod.yml
 kubectl apply -f kubernetes/frontend-react-app/reactjs-frontend-app-service.yml
 ```
@@ -54,7 +69,10 @@ To delete all the Kubernetes Objects
 ```bash
 kubectl delete -f kubernetes/postgres/postgres-deployment.yml       
 kubectl delete -f kubernetes/postgres/postgres-service.yml
+
 kubectl delete -f kubernetes/fastapi-web-app/fastapi-web-app-pod.yml
+kubectl delete -f kubernetes/fastapi-web-app/fastapi-web-app-service.yml
+
 kubectl delete -f kubernetes/frontend-react-app/reactjs-frontend-app-pod.yml
 kubectl delete -f kubernetes/frontend-react-app/reactjs-frontend-app-service.yml
 ```
@@ -73,8 +91,10 @@ kubectl port-forward service/reactjs-frontend-app-service 3000:3000
 ```bash
 kubectl apply -f kubernetes/postgres/postgres-deployment.yml       
 kubectl apply -f kubernetes/postgres/postgres-service.yml
+
 kubectl apply -f kubernetes/fastapi-web-app/fastapi-web-app-deployment.yml
 kubectl apply -f kubernetes/fastapi-web-app/fastapi-web-app-service.yml
+
 kubectl apply -f kubernetes/frontend-react-app/reactjs-frontend-app-deployment.yml
 kubectl apply -f kubernetes/frontend-react-app/reactjs-frontend-app-service.yml
 ```
@@ -83,8 +103,10 @@ To delete all the Kubernetes Objects
 ```bash
 kubectl delete -f kubernetes/postgres/postgres-deployment.yml       
 kubectl delete -f kubernetes/postgres/postgres-service.yml
+
 kubectl delete -f kubernetes/fastapi-web-app/fastapi-web-app-deployment.yml
 kubectl delete -f kubernetes/fastapi-web-app/fastapi-web-app-service.yml
+
 kubectl delete -f kubernetes/frontend-react-app/reactjs-frontend-app-deployment.yml
 kubectl delete -f kubernetes/frontend-react-app/reactjs-frontend-app-service.yml
 ```

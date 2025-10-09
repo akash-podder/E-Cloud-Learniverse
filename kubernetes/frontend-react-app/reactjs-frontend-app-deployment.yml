@@ -19,11 +19,14 @@ spec:
     spec:
       containers:
         - name: reactjs-frontend-e-cloud-learniverse-pod
-          image: reactjs-frontend-e-cloud-docker-image
+          image: reactjs-frontend-e-cloud-docker-image:kubernetes
           imagePullPolicy: Never
-          env:
-            - name: VITE_BACKEND_API_BASE_URL
-              value: "http://fastapi-web-app-service:8000/api"  # 👈 Must be the "Service" name of "FastAPI with proper URL format"
+          # The Root Cause:
+          # Vite environment variables (VITE_*) are embedded into the JavaScript bundle at build time, not at runtime. So even though you're setting the environment variable in the Kubernetes pod YAML, it has no effect because the
+          # value was already hardcoded during docker build.
+#          env:
+#            - name: VITE_BACKEND_API_BASE_URL
+#              value: "http://fastapi-web-app-service:8000/api"  # 👈 Must be the "Service" name of "FastAPI with proper URL format"
           ports:
             - containerPort: 80
           resources:

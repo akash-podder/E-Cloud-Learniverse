@@ -1,7 +1,11 @@
 # Kind (Kubernetes in Docker) Commands
 
+Kind Official Guide: [Kind Documentation](https://kind.sigs.k8s.io/docs/user/quick-start/)
 ```bash
-brew install kind
+# Make it executable
+chmod +x /kind-cluster/kind_install.sh
+# Run the installation
+./kind-cluster/kind_install.sh
 kind version
 
 brew install kubectl
@@ -13,6 +17,11 @@ kubectl version
 --image → without this Tag it will download the “latest” image
 ```bash
 kind create cluster --name mac-cluster-test --image kindest/node:v1.30.6
+```
+
+`Three Node (1 Master and 2 Worker) Cluster` Command:
+```bash
+kind create cluster --name mac-cluster-test --image kindest/node:v1.30.6 --config kind-three-node-config.yml
 ```
 
 ```bash
@@ -58,3 +67,20 @@ Load `e-cloud-fastapi-docker-image` to locally in "mac-cluster-test"
 ```bash
 kind load docker-image e-cloud-fastapi-docker-image:latest --name mac-cluster-test
 ```
+
+## `Kind` remove images from Cluster
+`crictl` == `docker` command, but it is an Open Source CLI for any `Container Runtime` (example: `CRI-O`, `run-c`)
+
+`crictl` stands for `Container Runtime Interface CLI`.
+It’s a command-line tool used to interact directly with the container runtime (like containerd, CRI-O, etc.) that Kubernetes uses under the hood.
+```bash
+docker exec mac-cluster-test-control-plane crictl rmi docker.io/library/e-cloud-fastapi-docker-image:latest
+docker exec mac-cluster-test-control-plane crictl rmi docker.io/library/reactjs-frontend-e-cloud-docker-image:latest
+docker exec mac-cluster-test-control-plane crictl rmi docker.io/library/postgres:17
+```
+Think of it as the Kubernetes-friendly equivalent of docker CLI — but it talks to the CRI layer used by kubelet.
+
+So:
+When you run docker ps → it lists Docker containers.
+
+When you run crictl ps → it lists containers managed by Kubernetes (via CRI).

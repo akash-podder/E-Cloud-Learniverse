@@ -5,8 +5,12 @@ FROM node:22-alpine AS first_stage_react_app_builder
 
 WORKDIR /app
 
-# Copy environment file and source variables
-COPY .env_docker .env
+# Define build argument to select environment file (defaults to "docker")
+ARG ENV_FILE=docker
+
+# Copy the selected environment file to .env
+# ENV_FILE can be "docker" or "kubernetes"
+COPY .env_${ENV_FILE} .env
 
 # Copy package files
 COPY package*.json ./
@@ -26,8 +30,8 @@ FROM nginx:alpine
 # Copy built files from first_stage_react_app_builder stage
 COPY --from=first_stage_react_app_builder /app/dist /usr/share/nginx/html
 
-# Copy custom nginx configuration (optional)
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copy custom nginx configuration with reverse proxy for backend API
+COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose port 80, because Nginx exposes port 80
 EXPOSE 80
