@@ -9,7 +9,7 @@ This guide explains how React applications are built and served in production en
 ## Development vs Production
 
 ### Development Mode (`npm run dev`)
-```bash
+```shell script
 npm run dev
 # - Vite dev server runs on port 5173
 # - Hot Module Replacement (HMR) enabled
@@ -19,7 +19,7 @@ npm run dev
 ```
 
 ### Production Mode (`npm run build`)
-```bash
+```shell script
 npm run build
 # - Creates optimized static files (HTML, CSS, JS)
 # - Code is minified and bundled
@@ -168,7 +168,7 @@ This command starts Nginx in the container:
 
 **Solution**: `daemon off;` keeps Nginx in foreground → container stays running
 
-```bash
+```shell script
 # Without "daemon off;"
 nginx          # Starts, backgrounds itself, returns
 # Container exits immediately ❌
@@ -348,14 +348,14 @@ ENV VITE_BACKEND_API_BASE_URL=$VITE_BACKEND_API_BASE_URL
 ### Changing API URL:
 
 **Option 1: Rebuild with different URL**
-```bash
+```shell script
 docker build \
   --build-arg VITE_BACKEND_API_BASE_URL=http://production-api.com/api \
   -t react-app .
 ```
 
 **Option 2: Multiple builds for different environments**
-```bash
+```shell script
 # Development build
 docker build --build-arg VITE_BACKEND_API_BASE_URL=http://localhost:8002/api -t react-app:dev .
 
@@ -382,7 +382,7 @@ docker build --build-arg VITE_BACKEND_API_BASE_URL=https://api.myapp.com/api -t 
 
 ### Build Commands:
 
-```bash
+```shell script
 # Local build test
 cd frontend/e-cloud-learniverse-frontend-react
 npm run build
@@ -400,7 +400,7 @@ docker-compose up --build react_frontend
 
 ### Verify Deployment:
 
-```bash
+```shell script
 # Check container is running
 docker ps | grep react
 
@@ -493,23 +493,23 @@ build: {
 ## Security Best Practices
 
 1. **Run as non-root user**:
-```dockerfile
+```shell script
 RUN addgroup -g 101 -S nginx && adduser -S -D -H -u 101 -h /var/cache/nginx -s /sbin/nologin -G nginx nginx
 USER nginx
 ```
 
 2. **Remove unnecessary packages**:
-```dockerfile
+```shell script
 RUN apk del --purge build-dependencies
 ```
 
 3. **Use specific image versions**:
-```dockerfile
+```shell script
 FROM nginx:1.25-alpine  # Not "latest"
 ```
 
 4. **Scan for vulnerabilities**:
-```bash
+```shell script
 docker scan react-frontend:latest
 ```
 
@@ -533,20 +533,14 @@ npm run build → Static files → Docker build → Nginx container → Producti
 ```
 
 ### Access Points:
-
 - **Development**: http://localhost:5173 (Vite dev server)
 - **Production (Docker)**: http://localhost:3000 (Nginx)
 - **Backend API**: http://localhost:8002/api
-
 ---
 
 ## Additional Resources
-
 - [Vite Build Documentation](https://vitejs.dev/guide/build.html)
 - [Nginx Docker Image](https://hub.docker.com/_/nginx)
 - [React Production Build](https://react.dev/learn/start-a-new-react-project#production-grade-react-frameworks)
 - [Docker Multi-Stage Builds](https://docs.docker.com/build/building/multi-stage/)
-
 ---
-
-**Last Updated**: 2025-10-07
